@@ -37,17 +37,17 @@ def Make_sqrect(size, coll=0): #Makes the rectangles for all squares that are cr
 def PuzzleLoader(fname): #Filename
     ## Loads numbers to be hints, in the file: two first rows for numbers, first for ones on left side and second on numbers on top, and then rest of
     ## the file will be for PuzzleChecker ##
-    size = [] #Empty list for x*y in the puzzle file e. g. 5*5 = [5, 5]
+    size = []
     join = path.join
     try:
-        with open(join("data", "puzzles", fname), "r") as puzzle: #Open puzzle file
-            strsize = [] #Empty list for raw data from the file
+        with open(join("data", "puzzles", fname), "r") as puzzle:
+            strsize = []
             sizerow = len(puzzle.readline())
-            r = 0 #Counter
+            r = 0
             append = strsize.append
             read = puzzle.read
             puzzle.seek(0, SEEK_SET)
-            while r < sizerow: #Runs five times
+            while r < sizerow:
                 num = read(1) #Reads each byte from the first row
                 append(num) #Appends the data to the list
                 r += 1
@@ -84,7 +84,7 @@ def PuzzleLoader(fname): #Filename
         sysexit()
     return size, puzzle.name #Return Puzzle size and filename
 
-def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)): #Checks whether all required squares are filled and no other square
+def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)): #Checks whether all required squares are filled and no other square is filled
     ## Tests if the correct squares are filled ##
     if filledlist == winlist:
         from resources import load_img
@@ -92,29 +92,29 @@ def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)): #Ch
         join = path.join
         solution = load_img(join("solutions", "pz"+str(puznum)+".png"), 1)
         screenrect = screen.get_rect()
-        text = font.Font(join("data", "font", "EHSMB.TTF"), 35) #Change to a font from file e. g. pygame.font.Font(Something)
-        soltext = text.render("Solved!", True, (50, 50, 50)) #Change font to surface
+        text = font.Font(join("data", "font", "EHSMB.TTF"), 35)
+        soltext = text.render("Solved!", True, (50, 50, 50))
         soltextrect = soltext.get_rect()
         soltextrect = soltextrect.move(screenrect.centerx-soltext.get_width()/2, screenrect.centery-solution.get_height()/2-50)
         solutionrect = solution.get_rect()
         solutionrect.centerx = screenrect.centerx
         solutionrect.centery = screenrect.centery
-        rtrntext = text.render("Returning to menu...", True, (50, 50, 50)) #Change font to surface
+        rtrntext = text.render("Returning to menu...", True, (50, 50, 50))
         rtrntextrect = rtrntext.get_rect()
         rtrntextrect = rtrntextrect.move(screenrect.centerx-rtrntext.get_width()/2, screenrect.centery+solution.get_height()/2+50)
         screen.fill(bgc)
         blit(soltext, soltextrect)
         blit(solution, solutionrect)
         blit(rtrntext, rtrntextrect)
-        return 0
-    return 1
+        return 0 #Quit loop
+    return 1 #Continue loop
 
-def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=0):
-    i = 1 #Counter
-    mpos = mouse.get_pos() #Gets the mouse position
+def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=0): #Handles mouse clicks
+    i = 1
+    mpos = mouse.get_pos()
     count = filled.count
     sort = filled.sort
-    if button == 1: # If the left mouse button was pressed
+    if button == 1: #If the left mouse button was pressed
         append = filled.append
         for sqrect in collisionrects: #Test each rectangle
             if sqrect.collidepoint(mpos): #If there is collision with the mouse pointer
@@ -122,7 +122,7 @@ def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=
                     append(i)
                     sort()
                 screen.fill((0, 0, 0), sqrect)
-            i += 1 #Add one to the counter
+            i += 1
     else:
         remove = filled.remove
         for sqrect in collisionrects:
@@ -133,16 +133,16 @@ def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=
                 screen.fill(bgc, sqrect)
                 screen.blit(sq, sqrect)
             i += 1
-    return filled #Change to filledlist
+    return filled
 
 def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen: for blitting, cluepic: for background, puzfile: for checking the clues
     ## This function draws the clues and also creates the win list for PuzzleChecker() ##
-    i, x, y = 0, 110, 44 #i is just an integer for checking if enough pictures have been drawn, x is the x-coordinate and y is y-coordinate
+    i, x, y = 0, 110, 44 #Top
     blit = screen.blit
     while i < size[0]: #While i is less than width: The top clue pictures
-        cluerect = Rect(x, y, 22, 88) #Create a rectangle where the picture is drawn
-        blit(cluepic[0], cluerect) #Draw picture
-        x += 22 #Change position
+        cluerect = Rect(x, y, 22, 88)
+        blit(cluepic[0], cluerect)
+        x += 22
         i += 1
     i, x, y = 0, 22, 132 #Reset for left side
     while i < size[1]: #While i is less than height: The left clue pictures
@@ -150,39 +150,39 @@ def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen:
         blit(cluepic[1], cluerect)
         y += 22
         i += 1
-    ## Create lists for clue numbers from puzfile ##
+    # Create lists for clue numbers from puzfile #
     i = 0
-    with open(puzfile, "r") as puzzle: #Open the puzzle file and close it when everything is done
+    with open(puzfile, "r") as puzzle:
         readline = puzzle.readline
         read = puzzle.read
         seek = puzzle.seek
-        sizerow = len(readline())+1 #Puzzle size, not useful here, linelength required though
-        leftlinelen = len(readline())+1 #Linelength of the clues in left side
-        toplinelen = len(readline())+1 #Linelength of the clues on top
-        leftline = [] #Create an empty list for appending
-        topline = [] #Create an empty list for appending
-        winlinelen = len(readline()) #Linelength of winning rects list
-        winline = [] #Create an empty list for appending
-        name = readline() #Name of the puzzle
+        sizerow = len(readline())+1
+        leftlinelen = len(readline())+1
+        toplinelen = len(readline())+1
+        leftline = [] #Left clues
+        topline = [] #Top clues
+        winlinelen = len(readline())
+        winline = [] #Needed filled squares for winning
+        name = readline()
         col = 1 #Column where the puzzle number goes
         append = leftline.append
-        while i < leftlinelen-2: #While we aren't in the end of the line in puzzle file
-            seek(sizerow+i, SEEK_SET) #Sets the position in the file
-            clue = read(1) #Reads the number, dot or point
+        while i < leftlinelen-2:
+            seek(sizerow+i, SEEK_SET)
+            clue = read(1)
             if clue == ".": #If dot then the next number will be in the next row
                 col = 1
             elif clue == ",": #If point then the next number will be in the next column
                 col += 1
             else:
-                clue2 = read(1) #Checks whether the next byte is a number
-                if clue2.isdigit(): #If it is then combine the first number and second number and append them and skip one byte
+                clue2 = read(1)
+                if clue2.isdigit():
                     append((int(clue+clue2), col))
                     i += 1
-                else: #If it isn't just append the first number
+                else:
                     append((int(clue), col))
-            i += 1 #Go one byte forward
-        i = 0 #Reset
-        col = 1 #Reset
+            i += 1
+        i = 0
+        col = 1
         append = topline.append
         while i < toplinelen-2: #Look at first loop
             seek(sizerow+leftlinelen+i, SEEK_SET)
@@ -199,7 +199,7 @@ def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen:
                 else:
                     append((int(clue), col))
             i += 1
-        i = 0 #Reset
+        i = 0
         append = winline.append
         ## Create winlist ##
         while i < winlinelen-1: #Mostly the same
@@ -213,7 +213,7 @@ def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen:
                     winnum3 = read(1)
                     if winnum3.isdigit(): #Check whether there are three numbers(can't be higher than three because the biggest puzzle now is 31x30)
                         append(int(winnum+winnum2+winnum3))
-                        i += 2#Skip two next bytes
+                        i += 2
                     else:
                         append(int(winnum+winnum2))
                         i += 1
@@ -223,12 +223,12 @@ def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen:
     ########################
     ## PUZZLE FILE CLOSED ##
     ########################
-    ## Draw clue numbers from the lists ##
+    # Draw clue numbers from the lists #
     join = path.join
-    i, x, y, leftlinelen, spacing, spacings = 0, 99, 135, len(leftline), 15, [] #Reset #Spacing of numbers: CHANGE
-    text = font.Font(join("data", "font", "freesansbold.ttf"), 15) #Change to a font from file e. g. pygame.font.Font(Something)
+    i, x, y, leftlinelen, spacing, spacings = 0, 99, 135, len(leftline), 15, []
+    text = font.Font(join("data", "font", "freesansbold.ttf"), 15)
     for numcol in leftline:
-        numtext = text.render(str(numcol[0]), True, (50, 50, 50)) #Change font to surface
+        numtext = text.render(str(numcol[0]), True, (50, 50, 50))
         numtextrect = numtext.get_rect()
         if i < leftlinelen-1:
             nextnum = leftline[i+1]
@@ -258,10 +258,10 @@ def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen:
                 spacings = []
             y += 22
         i += 1
-    #Reset and same thing for topline
-    i, x, y, toplinelen, spacing, spacings = 0, 117, 117, len(topline), 17, [] #Reset
+    # Reset and same thing for topline #
+    i, x, y, toplinelen, spacing, spacings = 0, 117, 117, len(topline), 17, []
     for numcol in topline:
-        numtext = text.render(str(numcol[0]), True, (50, 50, 50)) #Change font to surface
+        numtext = text.render(str(numcol[0]), True, (50, 50, 50))
         numtextrect = numtext.get_rect()
         if i < toplinelen-1:
             nextnum = topline[i+1]
@@ -285,8 +285,8 @@ def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen:
                 spacings = []
             x += 22
         i += 1
-    ## Draw puzzle name on the screen ##
-    text = font.Font(join("data", "font", "EHSMB.TTF"), 27) #Change to a font from file e. g. pygame.font.Font(Something)
+    # Draw puzzle name on the screen #
+    text = font.Font(join("data", "font", "EHSMB.TTF"), 27)
     nametext = text.render(name, True, (30, 30, 30))
     nametextrect = nametext.get_rect()
     nametextrect.centerx = 110+(size[0]*22/2)

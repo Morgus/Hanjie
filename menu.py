@@ -15,7 +15,7 @@ def menu(screen):
     blit = screen.blit
     #######################
     ## Loading resources ##
-    text = font.Font(join("data", "font", "EHSMB.TTF"), 60) #Change to a font from file e. g. pygame.font.Font(Something)
+    text = font.Font(join("data", "font", "EHSMB.TTF"), 60)
     menubg = load_img("menubg.png")
     ## Menu loop ##
     ## Testing, might be part of the real menu ##

@@ -19,8 +19,10 @@ def create_menu(screen, text, menustrings): #Screen for blitting, text for the f
         c += 70
     display.update()
     return menubuttons
+
 def puzzleselect():
     pass
+
 def randompuzzle(solved, allpuz, menubg, screen, text, end): # Remove allpuz, menubg, text, end ## MAY CHANGE ##
     blit = screen.blit
     screct = screen.get_rect()
@@ -51,7 +53,8 @@ def randompuzzle(solved, allpuz, menubg, screen, text, end): # Remove allpuz, me
             sleep(1.5)
         ## END ##
     return 1
-def MouseClicks(buttons):
+
+def MouseClicks(buttons): #Handles mouse clicks
     mpos = mouse.get_pos()
     i = 1
     for rect in buttons:

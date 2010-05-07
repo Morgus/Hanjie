@@ -12,7 +12,6 @@ def game(puzzlenum, screen, solved):
     bgc = (255, 255, 255)
     r = 1
     square = load_img("square.png", 1)
-    #filled_sq = load_img("filled_sq.png", 1)
     empty_sq = load_img("empty_sq.png", 1)
     clues = (load_img("clue_top.png", 1), load_img("clue_right.png", 1))
     ############################
@@ -31,7 +30,7 @@ def game(puzzlenum, screen, solved):
     ### Event loop ###
     while r:
         for ev in event.get():
-            if ev.type == QUIT: sysexit() #Quit function
+            if ev.type == QUIT: sysexit()
             if ev.type == MOUSEBUTTONDOWN: #If mouse button is pressed
                 if ev.button == 1:
                     filledlist = MouseClicks(Coll_squares, screen, 1, filledlist, bgc)

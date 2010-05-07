@@ -19,7 +19,7 @@ def load_img(name, alpha=0):
         sysexit()
     return img
 
-##def load_snd(name): # Not working!
+##def load_snd(name):
 ##    join = path.join
 ##    sound = mixer.Sound
 ##    #try:
