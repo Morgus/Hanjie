@@ -73,14 +73,12 @@ def randompuzzle(solved, allpuz, menubg, screen, text, end): # Remove allpuz, me
 def MouseClicks(buttons): #Handles mouse clicks
     mpos = mouse.get_pos()
     i = 1
+    a = 0
     for rect in buttons:
         if rect.collidepoint(mpos):
             a = i
         i += 1
-    try:
-        return a
-    except UnboundLocalError:
-        return 0
+    return a
 
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"

@@ -14,12 +14,15 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
+# TODO: All file handling in one "with open()", in a separate source file
 from os import path, SEEK_SET
 from sys import exit as sysexit
 from pygame import Rect, mouse, Surface, font
 from time import sleep
 
-def Make_sqrect(size, coll=0): #Makes the rectangles for all squares that are created, mainly for collision checking
+def Make_sqrect(size, coll=0):
+    """Makes the rectangles for all squares that are created,
+    mainly for collision checking"""
     sq = []
     a, i, x, y = 0, 0, 110, 132
     sqnum = size[0]*size[1]
@@ -50,8 +53,9 @@ def Make_sqrect(size, coll=0): #Makes the rectangles for all squares that are cr
     return sq
 
 def PuzzleLoader(fname): #Filename
-    ## Loads numbers to be hints, in the file: two first rows for numbers, first for ones on left side and second on numbers on top, and then rest of
-    ## the file will be for PuzzleChecker ##
+    """ Loads numbers to be hints, in the file: two first rows for numbers,
+    first for ones on left side and second on numbers on top, and then rest of
+    the file will be for PuzzleChecker """
     size = []
     join = path.join
     try:
@@ -99,7 +103,9 @@ def PuzzleLoader(fname): #Filename
         sysexit()
     return size, puzzle.name #Return Puzzle size and filename
 
-def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)): #Checks whether all required squares are filled and no other square is filled
+def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)):
+    """Checks whether all required squares are filled and
+    no other square is filled"""
     ## Tests if the correct squares are filled ##
     if filledlist == winlist:
         from resources import load_img
@@ -124,7 +130,8 @@ def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)): #Ch
         return 0 #Quit loop
     return 1 #Continue loop
 
-def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=0): #Handles mouse clicks
+def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=0):
+    """Handles mouse clicks"""
     i = 1
     mpos = mouse.get_pos()
     count = filled.count
@@ -150,8 +157,10 @@ def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=
             i += 1
     return filled
 
-def DrawClues(size, screen, cluepic, puzfile): #size: how many cluepics, screen: for blitting, cluepic: for background, puzfile: for checking the clues
-    ## This function draws the clues and also creates the win list for PuzzleChecker() ##
+def DrawClues(size, screen, cluepic, puzfile):
+    """size: how many cluepics, screen: for blitting,
+    cluepic: for background, puzfile: for checking the clues
+    This function draws the clues and also creates winlist for PuzzleChecker() """
     i, x, y = 0, 110, 44 #Top
     blit = screen.blit
     while i < size[0]: #While i is less than width: The top clue pictures
