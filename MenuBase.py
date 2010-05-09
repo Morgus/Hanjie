@@ -16,7 +16,7 @@
 
 import game
 from sys import exit as sysexit
-from pygame import font, Surface, display, mouse, Rect
+from pygame import font, display, mouse, Rect
 from time import sleep
 from random import randint
 

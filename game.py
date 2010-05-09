@@ -15,10 +15,10 @@
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
 from sys import exit as sysexit
-from resources import load_img
+from filehandler import *
 from GameBase import *
 from cPickle import dump
-from pygame import Surface, display, event
+from pygame import display, event
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 from time import sleep
 
@@ -27,9 +27,10 @@ def game(puzzlenum, screen, solved):
     ### Loading resources ###
     bgc = (255, 255, 255)
     r = 1
-    square = load_img("square.png", 1)
-    empty_sq = load_img("empty_sq.png", 1)
-    clues = (load_img("clue_top.png", 1), load_img("clue_right.png", 1))
+    l = load()
+    square = l.data("square.png", "img", 1)
+    empty_sq = l.data("empty_sq.png", "img", 1)
+    clues = (l.data("clue_top.png", "img", 1), l.data("clue_right.png", "img", 1))
     ############################
     ### Drawing first screen ###
     screen.fill(bgc)

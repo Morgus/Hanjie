@@ -16,15 +16,15 @@
 
 from MenuBase import *
 from os import path
-from resources import load_img
+from filehandler import *
 from sys import exit as sysexit
-from pygame import Surface, display, event, font
+from pygame import event, font
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 from time import sleep
-from cPickle import load
-##from random import randint #Random not needed when menu is fully created
+from cPickle import load as pload
 
 def menu(screen):
+    l = load()
     r = 1
     init = 1
     join = path.join
@@ -32,7 +32,7 @@ def menu(screen):
     #######################
     ## Loading resources ##
     text = font.Font(join("data", "font", "EHSMB.TTF"), 60)
-    menubg = load_img("menubg.png")
+    menubg = l.data("menubg.png", "img", 0)
     ## Menu loop ##
     ## Testing, might be part of the real menu ##
     allpuzzles = []
@@ -45,7 +45,7 @@ def menu(screen):
             i += 1
     with open("save", "r") as save:
         try:
-            solved = load(save)
+            solved = pload(save)
         except EOFError:
             solved = []
     puzzlenum = 0
