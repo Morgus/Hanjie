@@ -68,6 +68,7 @@ class load:
 class save:
     def __init__(self):
         pass
+
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
     sleep(1.5)
