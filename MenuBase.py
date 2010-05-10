@@ -17,7 +17,7 @@
 # TODO: Redo this file
 import game
 from sys import exit as sysexit
-from pygame import font, display, mouse, Rect
+from pygame import font, display, mouse
 from time import sleep
 from random import randint
 

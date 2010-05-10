@@ -73,7 +73,7 @@ class load:
             while i <= num:
                 append(i)
                 i += 1
-            return temp
+            return temp, num
     def saved(self):
         try:
             with open("save", "r") as savefile:

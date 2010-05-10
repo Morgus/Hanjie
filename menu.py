@@ -28,7 +28,7 @@ def menu(screen):
     ## Loading resources ##
     text = l.data("EHSMB.TTF", "font", fontsize=60)
     menubg = l.data("menubg.png", "img")
-    allpuzzles = l.data(ftype="pzcount")
+    allpuzzles, num = l.data(ftype="pzcount")
     solved = l.saved()
     puzzlenum = 0
     menuType = "main"

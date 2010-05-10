@@ -19,7 +19,7 @@
 from filehandler import *
 from os import path, SEEK_SET
 from sys import exit as sysexit
-from pygame import Rect, mouse, Surface, font
+from pygame import Rect, mouse, font
 from time import sleep
 
 def Make_sqrect(size, coll=0):
