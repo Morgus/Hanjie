@@ -14,6 +14,7 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
+# TODO: Redo this file
 import game
 from sys import exit as sysexit
 from pygame import font, display, mouse, Rect
@@ -27,7 +28,7 @@ def create_menu(screen, text, menustrings): #Screen for blitting, text for the f
     sr = screen.get_rect()
     c = -70
     for strs in menustrings:
-        t = text.render(strs, True, (50, 50, 50))
+        t = text(strs, True, (50, 50, 50))
         tr = t.get_rect()
         tr = tr.move(sr.centerx-t.get_width()/2, sr.centery-t.get_height()/2+c)
         blit(t, tr)
@@ -45,7 +46,7 @@ def randompuzzle(solved, allpuz, menubg, screen, text, end): # Remove allpuz, me
     ## REMOVE THIS ##
     if solved == allpuz:
         blit(menubg, screct)
-        testtext = text.render("All puzzles solved.", True, (50, 50, 50))
+        testtext = text("All puzzles solved.", True, (50, 50, 50))
         testtrect = testtext.get_rect()
         testtrect.centerx, testtrect.centery = screct.centerx, screct.centery
         blit(testtext, testtrect)
@@ -61,7 +62,7 @@ def randompuzzle(solved, allpuz, menubg, screen, text, end): # Remove allpuz, me
         ## REMOVE THIS ##
         if solved == allpuz:
             blit(menubg, screct)
-            testtext = text.render("All puzzles solved.", True, (50, 50, 50))
+            testtext = text("All puzzles solved.", True, (50, 50, 50))
             testtrect = testtext.get_rect()
             testtrect.centerx, testtrect.centery = screct.centerx, screct.centery
             blit(testtext, testtrect)
@@ -70,7 +71,8 @@ def randompuzzle(solved, allpuz, menubg, screen, text, end): # Remove allpuz, me
         ## END ##
     return 1
 
-def MouseClicks(buttons): #Handles mouse clicks
+def MouseClicks(buttons):
+    """Handles mouse clicks"""
     mpos = mouse.get_pos()
     i = 1
     a = 0
@@ -80,7 +82,16 @@ def MouseClicks(buttons): #Handles mouse clicks
         i += 1
     return a
 
+#####################
+## Extra functions ##
+def wait(time):
+    sleep(time)
+
+def quitprogram():
+    #Might be some more things here
+    sysexit()
+
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
-    sleep(1.5)
-    sysexit()
+    wait(1.5)
+    quitprogram()

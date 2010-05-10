@@ -14,13 +14,10 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-from sys import exit as sysexit
 from filehandler import *
 from GameBase import *
-from cPickle import dump
 from pygame import display, event
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
-from time import sleep
 
 def game(puzzlenum, screen, solved):
     #########################
@@ -28,6 +25,7 @@ def game(puzzlenum, screen, solved):
     bgc = (255, 255, 255)
     r = 1
     l = load()
+    s = save()
     square = l.data("square.png", "img", 1)
     empty_sq = l.data("empty_sq.png", "img", 1)
     clues = (l.data("clue_top.png", "img", 1), l.data("clue_right.png", "img", 1))
@@ -47,7 +45,7 @@ def game(puzzlenum, screen, solved):
     ### Event loop ###
     while r:
         for ev in event.get():
-            if ev.type == QUIT: sysexit()
+            if ev.type == QUIT: quitprogram()
             if ev.type == MOUSEBUTTONDOWN: #If mouse button is pressed
                 if ev.button == 1:
                     filledlist = MouseClicks(Coll_squares, screen, 1, filledlist, bgc)
@@ -57,14 +55,12 @@ def game(puzzlenum, screen, solved):
                     MouseClicks(baserects, screen, 0, filledlist, bgc, square)
                 r = PuzzleChecker(filledlist, winlist, puzzlenum, screen, bgc)
                 display.update()
-    sleep(1.5)
-    with open("save", "w") as save:
-        solved.append(puzzlenum)
-        solved.sort()
-        dump(solved, save)
-    return puzzlenum, solved #Return to menu, maybe store puzzlenum in some file to keep track of solved puzzles
+    solved.append(puzzlenum)
+    s.solvedpuzzles(solved)
+    wait(1.5)
+    return puzzlenum, solved
 
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
-    sleep(1.5)
-    sysexit()
+    wait(1.5)
+    quitprogram()

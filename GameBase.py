@@ -14,7 +14,9 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-# TODO: All file handling in one "with open()", in a separate source file
+# TODO: All file handling in one separate source file (filehandler.py)
+# TODO: Redo this file!
+from filehandler import *
 from os import path, SEEK_SET
 from sys import exit as sysexit
 from pygame import Rect, mouse, Surface, font
@@ -108,19 +110,19 @@ def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)):
     no other square is filled"""
     ## Tests if the correct squares are filled ##
     if filledlist == winlist:
-        from resources import load_img
+        l = load()
         blit = screen.blit
         join = path.join
-        solution = load_img(join("solutions", "pz"+str(puznum)+".png"), 1)
+        solution = l.data(join("solutions", "pz"+str(puznum)+".png"), "img")
         screenrect = screen.get_rect()
-        text = font.Font(join("data", "font", "EHSMB.TTF"), 35)
-        soltext = text.render("Solved!", True, (50, 50, 50))
+        text = l.data("EHSMB.TTF", "font", fontsize=35)
+        soltext = text("Solved!", True, (50, 50, 50))
         soltextrect = soltext.get_rect()
         soltextrect = soltextrect.move(screenrect.centerx-soltext.get_width()/2, screenrect.centery-solution.get_height()/2-50)
         solutionrect = solution.get_rect()
         solutionrect.centerx = screenrect.centerx
         solutionrect.centery = screenrect.centery
-        rtrntext = text.render("Returning to menu...", True, (50, 50, 50))
+        rtrntext = text("Returning to menu...", True, (50, 50, 50))
         rtrntextrect = rtrntext.get_rect()
         rtrntextrect = rtrntextrect.move(screenrect.centerx-rtrntext.get_width()/2, screenrect.centery+solution.get_height()/2+50)
         screen.fill(bgc)
@@ -318,7 +320,16 @@ def DrawClues(size, screen, cluepic, puzfile):
     blit(nametext, nametextrect)
     return winline
 
+#####################
+## Extra functions ##
+def wait(time):
+    sleep(time)
+
+def quitprogram():
+    #Might be some more things here
+    sysexit()
+
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
-    sleep(1.5)
-    sysexit()
+    wait(1.5)
+    quitprogram()

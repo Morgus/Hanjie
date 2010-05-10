@@ -14,11 +14,12 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-from pygame import image, mixer
+from pygame import image, mixer, font
 from os import path
 from sys import exit as sysexit
 from time import sleep
-from cPickle import load, dump as pload, dump
+from cPickle import load as pickleload
+from cPickle import dump
 
 class load:
     def __init__(self):
@@ -28,10 +29,10 @@ class load:
         self.join = path.join
         self.imgload = image.load
         self.sndload = mixer.Sound
-        self.musload = mixer.music
+        self.music = mixer.music
     def puzzle(self, num):
         pass
-    def data(self, name="", ftype="", alpha=0):
+    def data(self, name="", ftype="", alpha=0, fontsize=0):
         if ftype == "img":
             try:
                 imgname = self.join("data", "img", name)
@@ -61,13 +62,38 @@ class load:
             except:
                 pass
         elif ftype == "font":
-            pass
+            text = font.Font(self.join("data", "font", name), fontsize)
+            return text.render
+        elif ftype == "pzcount":
+            with open(self.join("data", "puzzles", "_pzcount")) as pzcount:
+                num = int(pzcount.readline())
+            i = 1
+            temp = []
+            append = temp.append
+            while i <= num:
+                append(i)
+                i += 1
+            return temp
     def saved(self):
-        pass
+        try:
+            with open("save", "r") as savefile:
+                savelist = pickleload(savefile)
+        except EOFError:
+            savelist = []
+        except IOError:
+            savelist = []
+            f = open("save", "w")
+            f.close()
+            del f
+        return savelist
 
 class save:
     def __init__(self):
         pass
+    def solvedpuzzles(self, savelist):
+        with open("save", "w") as savefile:
+            savelist.sort()
+            dump(savelist, savefile)
 
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
