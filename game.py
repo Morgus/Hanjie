@@ -56,7 +56,7 @@ def game(puzzlenum, screen, solved):
                 r = PuzzleChecker(filledlist, winlist, puzzlenum, screen, bgc)
                 display.update()
     solved.append(puzzlenum)
-    s.solvedpuzzles(solved)
+    S.solvedpuzzles(solved)
     wait(1.5)
     return puzzlenum, solved
 
