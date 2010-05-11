@@ -14,21 +14,21 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-from filehandler import *
-from GameBase import *
 from pygame import display, event
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
+from filehandler import *
+from GameBase import *
 
 def game(puzzlenum, screen, solved):
     #########################
     ### Loading resources ###
     bgc = (255, 255, 255)
     r = 1
-    l = load()
-    s = save()
-    square = l.data("square.png", "img", 1)
-    empty_sq = l.data("empty_sq.png", "img", 1)
-    clues = (l.data("clue_top.png", "img", 1), l.data("clue_right.png", "img", 1))
+    L = Load()
+    S = Save()
+    square = L.data("square.png", "img", 1)
+    empty_sq = L.data("empty_sq.png", "img", 1)
+    clues = (L.data("clue_top.png", "img", 1), L.data("clue_right.png", "img", 1))
     ############################
     ### Drawing first screen ###
     screen.fill(bgc)

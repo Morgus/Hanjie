@@ -14,14 +14,15 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-from pygame import image, mixer, font
 from os import path
 from sys import exit as sysexit
 from time import sleep
 from cPickle import load as pickleload
 from cPickle import dump
+from pygame import image, mixer, font
 
-class load:
+class Load:
+    """Handles all data loading from a file."""
     def __init__(self):
         # For puzzle loading #
         # Nothing yet...
@@ -30,9 +31,14 @@ class load:
         self.imgload = image.load
         self.sndload = mixer.Sound
         self.music = mixer.music
+    # Loads a puzzle and returns its size, cluestrings for left and top,
+    # name and list of squares needed to fill.
     def puzzle(self, num):
         pass
+    # Handles all image, sound, music and font loading. Also handles the
+    # check for the number of puzzles.
     def data(self, name="", ftype="", alpha=0, fontsize=0):
+        # Image loading
         if ftype == "img":
             try:
                 imgname = self.join("data", "img", name)
@@ -46,6 +52,7 @@ class load:
                 sleep(1.5)
                 sysexit()
             return img
+        # Sound loading
         elif ftype == "snd":
             try:
                 sndname = self.join("data", "snd", name)
@@ -56,14 +63,17 @@ class load:
                 sleep(1.5)
                 sysexit()
             return snd
+        # Music loading
         elif ftype == "mus":
             try:
                 pass
             except:
                 pass
+        # Font loading
         elif ftype == "font":
             text = font.Font(self.join("data", "font", name), fontsize)
             return text.render
+        # Checks how many puzzles there are from _pzcount file
         elif ftype == "pzcount":
             with open(self.join("data", "puzzles", "_pzcount")) as pzcount:
                 num = int(pzcount.readline())
@@ -74,7 +84,9 @@ class load:
                 append(i)
                 i += 1
             return temp, num
-    def saved(self):
+    # Loads the save file from root directory which contains puzzle numbers
+    # of solved puzzles.
+    def saved_data(self):
         try:
             with open("save", "r") as savefile:
                 savelist = pickleload(savefile)
@@ -87,9 +99,11 @@ class load:
             del f
         return savelist
 
-class save:
+class Save:
+    """Handles all data saving to a file."""
     def __init__(self):
         pass
+    # Saves the mubers of the solved puzzles to a file.
     def solvedpuzzles(self, savelist):
         with open("save", "w") as savefile:
             savelist.sort()

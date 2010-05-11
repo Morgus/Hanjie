@@ -14,14 +14,12 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-import menu, pygame
 from sys import exit as sysexit
 from os import environ
+import menu, pygame
 
 def main():
-    #########################
-    ### Setting up pygame ###
-    environ["SDL_VIDEO_CENTERED"] = "1"
+    environ["SDL_VIDEO_CENTERED"] = "1" # Centers the window
     pygame.init()
     if not pygame.font:
         print "Warning, fonts disabled, game not playable"
@@ -29,6 +27,7 @@ def main():
         sysexit()
     if not pygame.mixer:
         print "Warning, sound disabled"
+    # Creates the window and starts the game
     screen = pygame.display.set_mode((800, 800))
     pygame.display.set_caption("Hanjie")
     pygame.display.update()

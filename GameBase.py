@@ -14,30 +14,29 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-# TODO: All file handling in one separate source file (filehandler.py)
 # TODO: Redo this file!
-from filehandler import *
 from os import path, SEEK_SET
 from sys import exit as sysexit
-from pygame import Rect, mouse, font
 from time import sleep
+from pygame import Rect, mouse, font
+from filehandler import *
 
 def Make_sqrect(size, coll=0):
     """Makes the rectangles for all squares that are created,
     mainly for collision checking"""
     sq = []
-    a, i, x, y = 0, 0, 110, 132
+    c, i, x, y = 0, 0, 110, 132
     sqnum = size[0]*size[1]
     if coll==1:
         while i < sqnum:
             sqrect = Rect(x+1, y+1, 20, 20)
             sq.append(sqrect)
             x = x+22
-            a += 1
-            if a == size[0]:
+            c += 1
+            if c == size[0]:
                 x = 110
                 y += 22
-                a = 0
+                c = 0
             i += 1
         i = 0
     else:
@@ -45,11 +44,11 @@ def Make_sqrect(size, coll=0):
             sqrect = Rect(x, y, 22, 22)
             sq.append(sqrect)
             x = x+22
-            a += 1
-            if a == size[0]:
+            c += 1
+            if c == size[0]:
                 x = 110
                 y += 22
-                a = 0
+                c = 0
             i += 1
         i = 0
     return sq
@@ -110,12 +109,12 @@ def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)):
     no other square is filled"""
     ## Tests if the correct squares are filled ##
     if filledlist == winlist:
-        l = load()
+        L = Load()
         blit = screen.blit
         join = path.join
-        solution = l.data(join("solutions", "pz"+str(puznum)+".png"), "img")
+        solution = L.data(join("solutions", "pz"+str(puznum)+".png"), "img")
         screenrect = screen.get_rect()
-        text = l.data("EHSMB.TTF", "font", fontsize=35)
+        text = L.data("EHSMB.TTF", "font", fontsize=35)
         soltext = text("Solved!", True, (50, 50, 50))
         soltextrect = soltext.get_rect()
         soltextrect = soltextrect.move(screenrect.centerx-soltext.get_width()/2, screenrect.centery-solution.get_height()/2-50)

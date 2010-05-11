@@ -14,22 +14,22 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-from MenuBase import *
-from filehandler import *
 from pygame import event
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
+from MenuBase import *
+from filehandler import *
 
 def menu(screen):
-    l = load()
+    L = Load()
     r = 1
     init = 1
     blit = screen.blit
     #######################
     ## Loading resources ##
-    text = l.data("EHSMB.TTF", "font", fontsize=60)
-    menubg = l.data("menubg.png", "img")
-    allpuzzles, num = l.data(ftype="pzcount")
-    solved = l.saved()
+    text = L.data("EHSMB.TTF", "font", fontsize=60)
+    menubg = L.data("menubg.png", "img")
+    allpuzzles, num = L.data(ftype="pzcount")
+    solved = L.saved_data()
     puzzlenum = 0
     menuType = "main"
     ## Menu loop ##
@@ -40,7 +40,7 @@ def menu(screen):
             init = 0
         if menuType == "main": # Testing #
             for ev in event.get():
-                if ev.type == QUIT: quitprogram()
+                if ev.type == QUIT: r = 0
                 if ev.type == MOUSEBUTTONDOWN:
                     if ev.button == 1:
                         ##menuButtonClicked = 0
