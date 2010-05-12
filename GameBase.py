@@ -109,12 +109,12 @@ def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)):
     no other square is filled"""
     ## Tests if the correct squares are filled ##
     if filledlist == winlist:
-        L = Load()
+        data = LoadData()
         blit = screen.blit
         join = path.join
-        solution = L.data(join("solutions", "pz"+str(puznum)+".png"), "img")
+        solution = data.load(join("solutions", "pz"+str(puznum)+".png"), "img")
         screenrect = screen.get_rect()
-        text = L.data("EHSMB.TTF", "font", fontsize=35)
+        text = data.load("EHSMB.TTF", "font", fontsize=35)
         soltext = text("Solved!", True, (50, 50, 50))
         soltextrect = soltext.get_rect()
         soltextrect = soltextrect.move(screenrect.centerx-soltext.get_width()/2, screenrect.centery-solution.get_height()/2-50)

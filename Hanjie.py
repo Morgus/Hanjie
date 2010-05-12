@@ -16,7 +16,7 @@
 
 from sys import exit as sysexit
 from os import environ
-import menu, pygame
+import pygame, menu
 
 def main():
     environ["SDL_VIDEO_CENTERED"] = "1" # Centers the window

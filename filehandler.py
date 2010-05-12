@@ -86,7 +86,7 @@ class LoadData:
     # Loads the save file from root directory which contains puzzle numbers
     # of solved puzzles.
     # ########################
-    def load_saved_data(self):
+    def loadSavedData(self):
         try:
             with open("save", "r") as savefile:
                 savelist = pickleload(savefile)
@@ -124,7 +124,7 @@ class LoadPuzzle:
         counter = 0
         sizeStringLength = len(self.sizeString)
         sizeStringNotLast = sizeStringLength-1
-        sizeAppend = self.size.append
+        sizeAppend = self.puzzleSize.append
         while counter < sizeStringLength:
             firstNumber = self.sizeString[counter]
             if not firstNumber.isdigit():
@@ -231,7 +231,7 @@ class SaveData:
     # ########################
     # Saves the mubers of the solved puzzles to a file.
     # ########################
-    def solvedpuzzles(self, savelist):
+    def saveSolvedPuzzles(self, savelist):
         with open("save", "w") as savefile:
             savelist.sort()
             dump(savelist, savefile)

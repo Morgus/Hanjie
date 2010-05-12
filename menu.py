@@ -21,27 +21,28 @@ from MenuBase import *
 from filehandler import *
 
 def menu(screen):
-    L = Load()
-    r = 1
+    data = LoadData()
+    running = 1
     init = 1
     blit = screen.blit
     #######################
     ## Loading resources ##
-    text = L.data("EHSMB.TTF", "font", fontsize=60)
-    menubg = L.data("menubg.png", "img")
-    allpuzzles, num = L.data(ftype="pzcount")
-    solved = L.saved_data()
+    text = data.load("EHSMB.TTF", "font", fontsize=60)
+    menubg = data.load("menubg.png", "img")
+    allpuzzles, num = data.load(ftype="pzcount")
+    solved = data.loadSavedData()
     puzzlenum = 0
     menuType = "main"
     ## Menu loop ##
-    while r:
+    while running:
         if init == 1:
             blit(menubg, screen.get_rect())
-            menubuttons = create_menu(screen, text, ["Play random puzzle", "Puzzle select", "Exit"]) #There may be some more return values for this sometime
+            menubuttons = create_menu(screen, text,
+                                ["Play random puzzle", "Puzzle select", "Exit"]) #There may be some more return values for this sometime
             init = 0
         if menuType == "main": # Testing #
             for ev in event.get():
-                if ev.type == QUIT: r = 0
+                if ev.type == QUIT: quitprogram()
                 if ev.type == MOUSEBUTTONDOWN:
                     if ev.button == 1:
                         ##menuButtonClicked = 0
@@ -52,7 +53,7 @@ def menu(screen):
                             print "Function not yet implemented" #CHANGE
                             menuType = "select" #CHANGE
                         elif menuButtonClicked == 3:
-                            r = 0
+                            quitprogram()
         if menuType == "select": # Testing #
             ##menuButtonClicked = 0 # Testing #
             print "I'm in another menu!" # Testing #
