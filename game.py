@@ -14,6 +14,7 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
+# TODO: Redo this file!
 from pygame import display, event
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 from filehandler import *

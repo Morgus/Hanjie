@@ -21,7 +21,7 @@ from cPickle import load as pickleload
 from cPickle import dump
 from pygame import image, mixer, font
 
-class Load:
+class LoadData:
     """Handles all data loading from a file."""
     def __init__(self):
         # For puzzle loading #
@@ -32,129 +32,10 @@ class Load:
         self.sndload = mixer.Sound
         self.music = mixer.music
     # ########################
-    # Loads a puzzle and returns its size, cluestrings for left and top,
-    # name and list of squares needed to fill.
-    # ########################
-    def puzzle(self, pznum):
-        filename = self.join("data", "puzzles", "pz"+str(pznum)+".txt")
-        with open(filename, "r") as puzzle:
-            readline = puzzle.readline
-            # Puzzle size #
-            raw_size = readline()
-            size_len = len(raw_size)-1
-            size_len_not_last = size_len-1
-            size = []
-            # Clue numbers #
-            leftline = readline()
-            left_len = len(leftline)-1
-            left_len_not_last = left_len-1
-            left_list = []
-            topline = readline()
-            top_len = len(topline)-1
-            top_len_not_last = top_len-1
-            top_list = []
-            # Win list #
-            winline = readline()
-            win_len = len(winline)-1
-            win_len_not_last = win_len-1
-            win_len_not_sec_last = win_len-2
-            win_list = []
-            # Name #
-            name = readline()
-        # Puzzle size #
-        r = 0
-        append = size.append
-        while r < size_len:
-            num = raw_size[r]
-            if not num.isdigit():
-                pass
-            else:
-                if r < size_len_not_last:
-                    sec_num = raw_size[r+1]
-                    if sec_num.isdigit():
-                        append(int(num+sec_num))
-                        r += 1
-                    else:
-                        append(int(num))
-                else:
-                    append(int(num))
-            r += 1
-        # Clue numbers: Left #
-        r = 0
-        col = 1
-        append = left_list.append
-        while r < left_len:
-            clue = leftline[r]
-            if clue == ".": #If dot then the next number will be in the next row
-                col = 1
-            elif clue == ",": #If point then the next number will be in the next column
-                col += 1
-            else:
-                if r < left_len_not_last:
-                    clue2 = leftline[r+1]
-                    if clue2.isdigit():
-                        append((int(clue+clue2), col))
-                        r += 1
-                    else:
-                        append((int(clue), col))
-                else:
-                    append((int(clue), col))
-            r += 1
-        # Clue numbers: Top #
-        r = 0
-        col = 1
-        append = top_list.append
-        while r < top_len:
-            clue = topline[r]
-            if clue == ".": #If dot then the next number will be in the next row
-                col = 1
-            elif clue == ",": #If point then the next number will be in the next column
-                col += 1
-            else:
-                if r < top_len_not_last:
-                    clue2 = topline[r+1]
-                    if clue2.isdigit():
-                        append((int(clue+clue2), col))
-                        r += 1
-                    else:
-                        append((int(clue), col))
-                else:
-                    append((int(clue), col))
-            r += 1
-        # Win list #
-        r = 0
-        col = 1
-        append = win_list.append
-        while r < win_len:
-            winnum = winline[r]
-            if winnum == ".":
-                pass
-            else:
-                if r < win_len_not_last:
-                    winnum2 = winline[r+1]
-                    if winnum2.isdigit(): #Check whether there are two numbers
-                        if r < win_len_not_sec_last:
-                            winnum3 = winline[r+2]
-                            if winnum3.isdigit(): #Check whether there are three numbers(can't be higher than three because the biggest puzzle now is 31x30)
-                                append(int(winnum+winnum2+winnum3))
-                                r += 2
-                            else:
-                                append(int(winnum+winnum2))
-                                r += 1
-                        else:
-                            append(int(winnum+winnum2))
-                            r += 1
-                    else:
-                        append(int(winnum))
-                else:
-                    append(int(winnum))
-            r += 1
-        return size, left_list, top_list, win_list, name
-    # ########################
     # Handles all image, sound, music and font loading. Also handles the
     # check for the number of puzzles.
     # ########################
-    def data(self, name="", ftype="", alpha=0, fontsize=0):
+    def load(self, name="", ftype="", alpha=0, fontsize=0):
         # Image loading
         if ftype == "img":
             try:
@@ -205,7 +86,7 @@ class Load:
     # Loads the save file from root directory which contains puzzle numbers
     # of solved puzzles.
     # ########################
-    def saved_data(self):
+    def load_saved_data(self):
         try:
             with open("save", "r") as savefile:
                 savelist = pickleload(savefile)
@@ -218,7 +99,132 @@ class Load:
             del f
         return savelist
 
-class Save:
+class LoadPuzzle:
+    """Loads a puzzle file. You only need to initialize to get all values."""
+    def __init__(self, puzzleNumber):
+        self.puzzleFileName = path.join("data", "puzzles",
+                                                "pz"+str(puzzleNumber)+".txt")
+        self.loadFile()
+        self.getSize()
+        self.getLeftClues()
+        self.getTopClues()
+        self.getWinSquares()
+
+    def loadFile(self):
+        with open(self.puzzleFileName, "r") as puzzleFile:
+            read_line = puzzleFile.readline
+            self.sizeString = read_line().rstrip()
+            self.leftLine = read_line().rstrip()
+            self.topLine = read_line().rstrip()
+            self.winLine = read_line().rstrip()
+            self.puzzleTitle = read_line().rstrip()
+
+    def getSize(self):
+        self.puzzleSize = []
+        counter = 0
+        sizeStringLength = len(self.sizeString)
+        sizeStringNotLast = sizeStringLength-1
+        sizeAppend = self.size.append
+        while counter < sizeStringLength:
+            firstNumber = self.sizeString[counter]
+            if not firstNumber.isdigit():
+                pass
+            else:
+                if counter < sizeStringNotLast:
+                    secondNumber = self.sizeString[counter+1]
+                    if secondNumber.isdigit():
+                        sizeAppend(int(firstNumber+secondNumber))
+                        counter += 1
+                    else:
+                        sizeAppend(int(firstNumber))
+                else:
+                    sizeAppend(int(firstNumber))
+            counter += 1
+
+    def getLeftClues(self):
+        self.leftClues = []
+        counter = 0
+        leftLineLength = len(self.leftLine)
+        leftLineNotLast = leftLineLength-1
+        column = 1
+        clueAppend = self.leftClues.append
+        while counter < leftLineLength:
+            firstNumber = self.leftLine[counter]
+            if firstNumber == ".":
+                column = 1
+            elif firstNumber == ",":
+                column += 1
+            else:
+                if counter < leftLineNotLast:
+                    secondNumber = self.leftLine[counter+1]
+                    if secondNumber.isdigit():
+                        clueAppend((int(firstNumber+secondNumber), column))
+                        counter += 1
+                    else:
+                        clueAppend((int(firstNumber), column))
+                else:
+                    clueAppend((int(firstNumber), column))
+            counter += 1
+
+    def getTopClues(self):
+        self.topClues = []
+        counter = 0
+        topLineLength = len(self.topLine)
+        topLineNotLast = topLineLength-1
+        row = 1
+        clueAppend = self.topClues.append
+        while counter < topLineLength:
+            firstNumber = self.topLine[counter]
+            if firstNumber == ".":
+                row = 1
+            elif firstNumber == ",":
+                row += 1
+            else:
+                if counter < topLineNotLast:
+                    secondNumber = self.topLine[counter+1]
+                    if secondNumber.isdigit():
+                        clueAppend((int(firstNumber+secondNumber), row))
+                        counter += 1
+                    else:
+                        clueAppend((int(firstNumber), row))
+                else:
+                    clueAppend((int(firstNumber), row))
+            counter += 1
+
+    def getWinSquares(self):
+        self.winSquares = []
+        counter = 0
+        winLineLength = len(self.winLine)
+        winLineNotLast = winLineLength-1
+        winLineNotSecondToLast = winLineLength-2
+        winAppend = self.winSquares.append
+        while counter < winLineLength:
+            firstNumber = self.winLine[counter]
+            if not firstNumber.isdigit():
+                pass
+            else:
+                if counter < winLineNotLast:
+                    secondNumber = self.winLine[counter+1]
+                    if secondNumber.isdigit():
+                        if counter < winLineNotSecondToLast:
+                            thirdNumber = self.winLine[counter+2]
+                            if thirdNumber.isdigit():
+                                winAppend(int(firstNumber+secondNumber+
+                                                                thirdNumber))
+                                counter += 2
+                            else:
+                                winAppend(int(firstNumber+secondNumber))
+                                counter += 1
+                        else:
+                            winAppend(int(firstNumber+secondNumber))
+                            counter += 1
+                    else:
+                        winAppend(int(firstNumber))
+                else:
+                    winAppend(int(firstNumber))
+            counter += 1
+
+class SaveData:
     """Handles all data saving to a file."""
     def __init__(self):
         pass
