@@ -17,8 +17,8 @@
 # TODO: Redo this file!
 from pygame import display, event
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
+from gamedefs import *
 from filehandler import *
-from GameBase import *
 
 def game(puzzleNumber, gameWindow, solvedPuzzles):
     #########################
@@ -34,13 +34,13 @@ def game(puzzleNumber, gameWindow, solvedPuzzles):
     ############################
     ### Drawing first screen ###
     gameWindow.fill(backGroundColor)
-##    puzzlesize, puzzlefilename = PuzzleLoader("pz"+str(puzzlenum)+".txt")
     baserects = Make_sqrect(puzzle.puzzleSize)
     Coll_squares = Make_sqrect(puzzle.puzzleSize, 1) #TODO: Needs to be at center of the window
     blit = gameWindow.blit
     for sqrect in baserects:
         blit(square, sqrect)
-    winlist = DrawClues(puzzle.puzzleSize, gameWindow, clues, puzzle.puzzleFileName)
+    DrawClues(puzzle.puzzleSize, gameWindow, clues, puzzle.leftClues, puzzle.topClues, puzzle.puzzleTitle)
+    winlist = puzzle.winSquares
     filledlist = []
     display.update()
     ##################

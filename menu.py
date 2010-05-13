@@ -15,9 +15,9 @@
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
 # TODO: Redo this file
-from pygame import event
+from pygame import event, display
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
-from MenuBase import *
+from menudefs import *
 from filehandler import *
 
 def menu(screen):
@@ -27,10 +27,10 @@ def menu(screen):
     blit = screen.blit
     #######################
     ## Loading resources ##
-    text = data.load("EHSMB.TTF", "font", fontsize=60)
+    text = data.load("EHSMB.TTF", "font", fontSize=60)
     menubg = data.load("menubg.png", "img")
-    allpuzzles, num = data.load(ftype="pzcount")
-    solved = data.loadSavedData()
+    allpuzzles, num = data.load(fileType="pzcount")
+    solved = data.loadSolvedPuzzles()
     puzzlenum = 0
     menuType = "main"
     ## Menu loop ##
@@ -39,6 +39,7 @@ def menu(screen):
             blit(menubg, screen.get_rect())
             menubuttons = create_menu(screen, text,
                                 ["Play random puzzle", "Puzzle select", "Exit"]) #There may be some more return values for this sometime
+            display.update()
             init = 0
         if menuType == "main": # Testing #
             for ev in event.get():
@@ -46,7 +47,7 @@ def menu(screen):
                 if ev.type == MOUSEBUTTONDOWN:
                     if ev.button == 1:
                         ##menuButtonClicked = 0
-                        menuButtonClicked = MouseClicks(menubuttons)
+                        menuButtonClicked = MouseClicksMenu(menubuttons)
                         if menuButtonClicked == 1:
                             init = randompuzzle(solved, allpuzzles, menubg, screen, text, num)
                         elif menuButtonClicked == 2:
@@ -54,6 +55,7 @@ def menu(screen):
                             menuType = "select" #CHANGE
                         elif menuButtonClicked == 3:
                             quitprogram()
+                        display.update()
         if menuType == "select": # Testing #
             ##menuButtonClicked = 0 # Testing #
             print "I'm in another menu!" # Testing #

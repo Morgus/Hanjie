@@ -16,99 +16,101 @@
 
 from os import path
 from sys import exit as sysexit
+from sys import exc_info
 from time import sleep
 from cPickle import load as pickleload
 from cPickle import dump
 from pygame import image, mixer, font
+from errors import error
 
 class LoadData:
     """Handles all data loading from a file."""
     def __init__(self):
-        # For puzzle loading #
-        # Nothing yet...
-        # For data loading #
         self.join = path.join
-        self.imgload = image.load
-        self.sndload = mixer.Sound
+        self.imageLoad = image.load
+        self.soundLoad = mixer.Sound
         self.music = mixer.music
-    # ########################
-    # Handles all image, sound, music and font loading. Also handles the
-    # check for the number of puzzles.
-    # ########################
-    def load(self, name="", ftype="", alpha=0, fontsize=0):
-        # Image loading
-        if ftype == "img":
+
+    def load(self, name="", fileType="", alpha=0, fontSize=0):
+        if fileType == "img":
             try:
-                imgname = self.join("data", "img", name)
-                img = self.imgload(imgname)
+                imageFileName = self.join("data", "img", name)
+                imageFile = self.imageLoad(imageFileName)
                 if alpha == 1:
-                    img.convert_alpha()
+                    imageFile.convert_alpha()
                 else:
-                    img.convert()
+                    imageFile.convert()
+                return imageFile
             except:
-                print "Can't load image: "+imgname
-                sleep(1.5)
+                print "Can't load image: "+imageFileName
+                raw_input("Press Enter to close")
                 sysexit()
-            return img
-        # Sound loading
-        elif ftype == "snd":
+        elif fileType == "snd":
             try:
-                sndname = self.join("data", "snd", name)
-                print "Loading "+sndname
-                snd = self.sndload(sndname)
+                soundFileName = self.join("data", "snd", name)
+                soundFile = self.soundLoad(soundFileName)
+                return soundFile
             except:
-                print "Can't load sound: "+sndname
-                sleep(1.5)
+                print "Can't load sound: "+soundFileName
+                raw_input("Press Enter to close")
                 sysexit()
-            return snd
-        # Music loading
-        elif ftype == "mus":
+        elif fileType == "mus":
             try:
                 pass
             except:
                 pass
-        # Font loading
-        elif ftype == "font":
-            text = font.Font(self.join("data", "font", name), fontsize)
-            return text.render
-        # Checks how many puzzles there are from _pzcount file
-        elif ftype == "pzcount":
-            with open(self.join("data", "puzzles", "_pzcount")) as pzcount:
-                num = int(pzcount.readline())
-            i = 1
-            temp = []
-            append = temp.append
-            while i <= num:
-                append(i)
-                i += 1
-            return temp, num
-    # ########################
-    # Loads the save file from root directory which contains puzzle numbers
-    # of solved puzzles.
-    # ########################
-    def loadSavedData(self):
+        elif fileType == "font":
+            try:
+                fontFileName = self.join("data", "font", name)
+                fontFile = font.Font(fontFileName, fontSize)
+                return fontFile.render
+            except:
+                print "Can't load font: "+fontFileName
+                raw_input("Press Enter to close")
+                sysexit()
+        elif fileType == "pzcount":
+            try:
+                with open(self.join("data", "puzzles", "_pzcount")) as puzzleCount:
+                    maxPuzzleNumber = int(puzzleCount.readline())
+                counter = 1
+                puzzleNumberList = []
+                append = puzzleNumberList.append
+                while counter <= maxPuzzleNumber:
+                    append(counter)
+                    counter += 1
+                return puzzleNumberList, maxPuzzleNumber
+            except:
+                print "Can't load _pzcount"
+                raw_input("Press Enter to close")
+                sysexit()
+
+    def loadSolvedPuzzles(self):
         try:
-            with open("save", "r") as savefile:
-                savelist = pickleload(savefile)
+            with open("save", "r") as saveFile:
+                solvedPuzzles = pickleload(saveFile)
         except EOFError:
-            savelist = []
+            solvedPuzzles = []
         except IOError:
-            savelist = []
+            solvedPuzzles = []
             f = open("save", "w")
             f.close()
             del f
-        return savelist
+        return solvedPuzzles
 
 class LoadPuzzle:
     """Loads a puzzle file. You only need to initialize to get all values."""
     def __init__(self, puzzleNumber):
         self.puzzleFileName = path.join("data", "puzzles",
                                                 "pz"+str(puzzleNumber)+".txt")
-        self.loadFile()
-        self.getSize()
-        self.getLeftClues()
-        self.getTopClues()
-        self.getWinSquares()
+        try:
+            self.loadFile()
+            self.getSize()
+            self.getLeftClues()
+            self.getTopClues()
+            self.getWinSquares()
+        except:
+            error("LoadPuzzle()", exc_info()[0])
+            sysexit()
 
     def loadFile(self):
         with open(self.puzzleFileName, "r") as puzzleFile:
@@ -228,15 +230,13 @@ class SaveData:
     """Handles all data saving to a file."""
     def __init__(self):
         pass
-    # ########################
-    # Saves the mubers of the solved puzzles to a file.
-    # ########################
-    def saveSolvedPuzzles(self, savelist):
-        with open("save", "w") as savefile:
-            savelist.sort()
-            dump(savelist, savefile)
+
+    def saveSolvedPuzzles(self, solvedPuzzles):
+        with open("save", "w") as saveFile:
+            solvedPuzzles.sort()
+            dump(solvedPuzzles, saveFile)
 
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
     sleep(1.5)
-    #sysexit()
+    sysexit()

@@ -1,5 +1,10 @@
+# Ignore thumbnails
 Thumbs.db
+# Ignore some file extensions
 *.pyc
+*.log
+# Ignore test prefix
+test_*
+# Ignore specific files
 GitCommit.txt
 save
-test_*
