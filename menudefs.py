@@ -81,20 +81,6 @@ def MouseClicksMenu(buttons):
         i += 1
     return a
 
-#####################
-## Extra functions ##
-def error(location, errorInfo):
-    with open("error.log", "a") as errorlog:
-        errorlog.write(str(datetime.now())+"\n")
-        errorlog.write(location+"\n"+errorInfo+"\n\n")
-
-def wait(time):
-    sleep(time)
-
-def quitprogram():
-    #Might be some more things here
-    sysexit()
-
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
     wait(1.5)

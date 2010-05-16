@@ -18,6 +18,7 @@
 from pygame import event, display
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 from menudefs import *
+from extradefs import *
 from filehandler import *
 
 def menu(screen):

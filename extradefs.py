@@ -14,10 +14,24 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-# TODO: Merge this to localdefs.py
+from sys import exit as sysexit
+from time import sleep
 from datetime import datetime
 
 def error(location, errorInfo):
     with open("error.log", "a") as errorlog:
         errorlog.write(str(datetime.now())+"\n")
-        errorlog.write(location+"\n"+errorInfo+"\n\n")
+        errorlog.write(location+" - "+errorInfo+"\n\n")
+    sysexit()
+
+def wait(time):
+    sleep(time)
+
+def quitprogram():
+    #Might be some more things here
+    sysexit()
+
+if __name__ == "__main__":
+    print "Start the game from Hanjie.py"
+    wait(1.5)
+    quitprogram()

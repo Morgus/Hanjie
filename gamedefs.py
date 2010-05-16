@@ -86,7 +86,7 @@ def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=
     mpos = mouse.get_pos()
     count = filled.count
     sort = filled.sort
-    if button == 1: #If the left mouse button was pressed
+    if button == 1:
         append = filled.append
         for sqrect in collisionrects: #Test each rectangle
             if sqrect.collidepoint(mpos): #If there is collision with the mouse pointer
@@ -95,7 +95,16 @@ def MouseClicks(collisionrects, screen, button, filled, bgc=(255, 255, 255), sq=
                     sort()
                 screen.fill((0, 0, 0), sqrect)
             i += 1
-    else:
+    elif button == 2:
+        remove = filled.remove
+        for sqrect in collisionrects:
+            if sqrect.collidepoint(mpos):
+                if count(i):
+                    remove(i)
+                    sort()
+                screen.fill(bgc, sqrect)
+            i += 1
+    elif button == 3:
         remove = filled.remove
         for sqrect in collisionrects:
             if sqrect.collidepoint(mpos):
@@ -193,20 +202,6 @@ def DrawClues(size, screen, cluepic, leftline, topline, name):
     nametextrect.centerx = 110+(size[0]*22/2)
     nametextrect.centery = 22
     blit(nametext, nametextrect)
-
-#####################
-## Extra functions ##
-def error(location, errorInfo):
-    with open("error.log", "a") as errorlog:
-        errorlog.write(str(datetime.now())+"\n")
-        errorlog.write(location+"\n"+errorInfo+"\n\n")
-
-def wait(time):
-    sleep(time)
-
-def quitprogram():
-    #Might be some more things here
-    sysexit()
 
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"

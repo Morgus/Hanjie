@@ -15,13 +15,12 @@
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
 from os import path
-from sys import exit as sysexit
 from sys import exc_info
 from time import sleep
 from cPickle import load as pickleload
 from cPickle import dump
 from pygame import image, mixer, font
-from errors import error
+from extradefs import *
 
 class LoadData:
     """Handles all data loading from a file."""
@@ -42,18 +41,16 @@ class LoadData:
                     imageFile.convert()
                 return imageFile
             except:
-                print "Can't load image: "+imageFileName
-                raw_input("Press Enter to close")
-                sysexit()
+                error("LoadData.load(fileType=\"img\")", str(exc_info()[0]))
+                quitprogram()
         elif fileType == "snd":
             try:
                 soundFileName = self.join("data", "snd", name)
                 soundFile = self.soundLoad(soundFileName)
                 return soundFile
             except:
-                print "Can't load sound: "+soundFileName
-                raw_input("Press Enter to close")
-                sysexit()
+                error("LoadData.load(fileType=\"snd\")", str(exc_info()[0]))
+                quitprogram()
         elif fileType == "mus":
             try:
                 pass
@@ -65,9 +62,8 @@ class LoadData:
                 fontFile = font.Font(fontFileName, fontSize)
                 return fontFile.render
             except:
-                print "Can't load font: "+fontFileName
-                raw_input("Press Enter to close")
-                sysexit()
+                error("LoadData.load(fileType=\"font\")", str(exc_info()[0]))
+                quitprogram()
         elif fileType == "pzcount":
             try:
                 with open(self.join("data", "puzzles", "_pzcount")) as puzzleCount:
@@ -80,9 +76,8 @@ class LoadData:
                     counter += 1
                 return puzzleNumberList, maxPuzzleNumber
             except:
-                print "Can't load _pzcount"
-                raw_input("Press Enter to close")
-                sysexit()
+                error("LoadData.load(fileType=\"pzcount\")", str(exc_info()[0]))
+                quitprogram()
 
     def loadSolvedPuzzles(self):
         try:
@@ -109,8 +104,8 @@ class LoadPuzzle:
             self.getTopClues()
             self.getWinSquares()
         except:
-            error("LoadPuzzle()", exc_info()[0])
-            sysexit()
+            error("LoadPuzzle()", str(exc_info()[0]))
+            quitprogram()
 
     def loadFile(self):
         with open(self.puzzleFileName, "r") as puzzleFile:
@@ -239,4 +234,4 @@ class SaveData:
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"
     sleep(1.5)
-    sysexit()
+    quitprogram()
