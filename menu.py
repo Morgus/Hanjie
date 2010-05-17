@@ -14,53 +14,58 @@
 ##    You should have received a copy of the GNU General Public License along
 ##    with this program; if not, see <http://www.gnu.org/licenses/>.
 
-# TODO: Redo this file
 from pygame import event, display
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 from menudefs import *
 from extradefs import *
 from filehandler import *
 
-def menu(screen):
-    data = LoadData()
+def menu(gameWindow):
+    load = LoadData()
     running = 1
-    init = 1
-    blit = screen.blit
-    #######################
-    ## Loading resources ##
-    text = data.load("EHSMB.TTF", "font", fontSize=60)
-    menubg = data.load("menubg.png", "img")
-    allpuzzles, num = data.load(fileType="pzcount")
-    solved = data.loadSolvedPuzzles()
-    puzzlenum = 0
+    init = True
+    menuFont = load.load("EHSMB.TTF", "font", fontSize=60)
+    menuBackground = load.load("menubg.png", "img")
+    backGroundColor = 255, 255, 255
+    puzzleList, maxPuzzleNumber = load.load(fileType="pzcount")
+    solvedPuzzles = load.loadSolvedPuzzles()
+    puzzleNumber = 1
+    mainMenuButtons = ["Play random puzzle", "Puzzle select", "Exit"]
     menuType = "main"
-    ## Menu loop ##
+
     while running:
-        if init == 1:
-            blit(menubg, screen.get_rect())
-            menubuttons = create_menu(screen, text,
-                                ["Play random puzzle", "Puzzle select", "Exit"]) #There may be some more return values for this sometime
-            display.update()
-            init = 0
-        if menuType == "main": # Testing #
+        if menuType == "main":
+            if init:
+                gameWindow.blit(menuBackground, gameWindow.get_rect())
+                menuButtons = create_menu(gameWindow, menuFont, mainMenuButtons)
+                display.update()
+                init = False
             for ev in event.get():
                 if ev.type == QUIT: quitprogram()
-                if ev.type == MOUSEBUTTONDOWN:
+                elif ev.type == MOUSEBUTTONDOWN:
                     if ev.button == 1:
-                        ##menuButtonClicked = 0
-                        menuButtonClicked = MouseClicksMenu(menubuttons)
+                        menuButtonClicked = MouseClicksMain(menuButtons)
                         if menuButtonClicked == 1:
-                            init = randompuzzle(solved, allpuzzles, menubg, screen, text, num)
+                            init = randompuzzle(solvedPuzzles, gameWindow,
+                                                maxPuzzleNumber)
                         elif menuButtonClicked == 2:
-                            print "Function not yet implemented" #CHANGE
-                            menuType = "select" #CHANGE
+                            print "Function not yet implemented" # Testing #
+                            init = True
+                            menuType = "select"
                         elif menuButtonClicked == 3:
                             quitprogram()
                         display.update()
-        if menuType == "select": # Testing #
-            ##menuButtonClicked = 0 # Testing #
-            print "I'm in another menu!" # Testing #
-            menuType = "main" # Testing #
+        elif menuType == "select":
+            if init:
+                gameWindow.fill(backGroundColor)
+                display.update()
+                init = False
+                print "I'm in another menu!" # Testing #
+            for ev in event.get():
+                if ev.type == QUIT: quitprogram()
+                elif ev.type == MOUSEBUTTONDOWN:
+                    menuType = "main"
+                    init = True
 
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"

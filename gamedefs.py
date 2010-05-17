@@ -58,12 +58,12 @@ def PuzzleChecker(filledlist, winlist, puznum, screen, bgc=(255, 255, 255)):
     no other square is filled"""
     ## Tests if the correct squares are filled ##
     if filledlist == winlist:
-        data = LoadData()
+        load = LoadData()
         blit = screen.blit
         join = path.join
-        solution = data.load(join("solutions", "pz"+str(puznum)+".png"), "img")
+        solution = load.load(join("solutions", "pz"+str(puznum)+".png"), "img")
         screenrect = screen.get_rect()
-        text = data.load("EHSMB.TTF", "font", fontSize=35)
+        text = load.load("EHSMB.TTF", "font", fontSize=35)
         soltext = text("Solved!", True, (50, 50, 50))
         soltextrect = soltext.get_rect()
         soltextrect = soltextrect.move(screenrect.centerx-soltext.get_width()/2, screenrect.centery-solution.get_height()/2-50)
@@ -120,15 +120,19 @@ def DrawClues(size, screen, cluepic, leftline, topline, name):
     """size: how many cluepics, screen: for blitting,
     cluepic: for background, puzfile: for checking the clues
     This function draws the clues and also creates winlist for PuzzleChecker() """
-    i, x, y = 0, 110, 44 #Top
+    load = LoadData()
+    textOne = load.load("EHSMB.TTF", "font", fontSize=27)
+    textTwo = load.load("freesansbold.ttf", "font", fontSize=15)
+    textThree = load.load("EHSMB.TTF", "font", fontSize=18)
+    i, x, y = 0, 110, 44
     blit = screen.blit
-    while i < size[0]: #While i is less than width: The top clue pictures
+    while i < size[0]:
         cluerect = Rect(x, y, 22, 88)
         blit(cluepic[0], cluerect)
         x += 22
         i += 1
-    i, x, y = 0, 22, 132 #Reset for left side
-    while i < size[1]: #While i is less than height: The left clue pictures
+    i, x, y = 0, 22, 132
+    while i < size[1]:
         cluerect = Rect(x, y, 88, 22)
         blit(cluepic[1], cluerect)
         y += 22
@@ -136,9 +140,8 @@ def DrawClues(size, screen, cluepic, leftline, topline, name):
     # Draw clue numbers from the lists #
     join = path.join
     i, x, y, leftlinelen, spacing, spacings = 0, 99, 135, len(leftline), 15, []
-    text = font.Font(join("data", "font", "freesansbold.ttf"), 15)
     for numcol in leftline:
-        numtext = text.render(str(numcol[0]), True, (50, 50, 50))
+        numtext = textTwo(str(numcol[0]), True, (50, 50, 50))
         numtextrect = numtext.get_rect()
         if i < leftlinelen-1:
             nextnum = leftline[i+1]
@@ -168,10 +171,10 @@ def DrawClues(size, screen, cluepic, leftline, topline, name):
                 spacings = []
             y += 22
         i += 1
-    # Reset and same thing for topline #
+
     i, x, y, toplinelen, spacing, spacings = 0, 117, 117, len(topline), 17, []
     for numcol in topline:
-        numtext = text.render(str(numcol[0]), True, (50, 50, 50))
+        numtext = textTwo(str(numcol[0]), True, (50, 50, 50))
         numtextrect = numtext.get_rect()
         if i < toplinelen-1:
             nextnum = topline[i+1]
@@ -196,12 +199,24 @@ def DrawClues(size, screen, cluepic, leftline, topline, name):
             x += 22
         i += 1
     # Draw puzzle name on the screen #
-    text = font.Font(join("data", "font", "EHSMB.TTF"), 27)
-    nametext = text.render(name, True, (30, 30, 30))
+    nametext = textOne(name, True, (30, 30, 30))
     nametextrect = nametext.get_rect()
     nametextrect.centerx = 110+(size[0]*22/2)
     nametextrect.centery = 22
     blit(nametext, nametextrect)
+    # Draw text "Press Esc to return to menu" #
+    rtrnstringOne = "Press Esc to"
+    rtrnstringTwo = "return to menu."
+    rtrntextOne = textThree(rtrnstringOne, True, (30, 30, 30))
+    rtrntextOnerect = rtrntextOne.get_rect()
+    rtrntextOnerect.centerx = 110+(size[0]*22/2)
+    rtrntextOnerect.centery = 132+(size[1]*22)+17
+    rtrntextTwo = textThree(rtrnstringTwo, True, (30, 30, 30))
+    rtrntextTworect = rtrntextTwo.get_rect()
+    rtrntextTworect.centerx = 120+(size[0]*22/2)
+    rtrntextTworect.centery = 132+(size[1]*22)+35
+    blit(rtrntextOne, rtrntextOnerect)
+    blit(rtrntextTwo, rtrntextTworect)
 
 if __name__ == "__main__":
     print "Start the game from Hanjie.py"

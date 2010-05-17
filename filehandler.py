@@ -19,7 +19,7 @@ from sys import exc_info
 from time import sleep
 from cPickle import load as pickleload
 from cPickle import dump
-from pygame import image, mixer, font
+from pygame import image, font
 from extradefs import *
 
 class LoadData:
@@ -27,8 +27,6 @@ class LoadData:
     def __init__(self):
         self.join = path.join
         self.imageLoad = image.load
-        self.soundLoad = mixer.Sound
-        self.music = mixer.music
 
     def load(self, name="", fileType="", alpha=0, fontSize=0):
         if fileType == "img":
@@ -43,19 +41,6 @@ class LoadData:
             except:
                 error("LoadData.load(fileType=\"img\")", str(exc_info()[0]))
                 quitprogram()
-        elif fileType == "snd":
-            try:
-                soundFileName = self.join("data", "snd", name)
-                soundFile = self.soundLoad(soundFileName)
-                return soundFile
-            except:
-                error("LoadData.load(fileType=\"snd\")", str(exc_info()[0]))
-                quitprogram()
-        elif fileType == "mus":
-            try:
-                pass
-            except:
-                pass
         elif fileType == "font":
             try:
                 fontFileName = self.join("data", "font", name)
@@ -66,7 +51,8 @@ class LoadData:
                 quitprogram()
         elif fileType == "pzcount":
             try:
-                with open(self.join("data", "puzzles", "_pzcount")) as puzzleCount:
+                with open(self.join("data", "puzzles",
+                                                    "_pzcount")) as puzzleCount:
                     maxPuzzleNumber = int(puzzleCount.readline())
                 counter = 1
                 puzzleNumberList = []
@@ -226,9 +212,11 @@ class SaveData:
     def __init__(self):
         pass
 
-    def saveSolvedPuzzles(self, solvedPuzzles):
+    def saveSolvedPuzzles(self, solvedPuzzles, puzzleNumber):
         with open("save", "w") as saveFile:
-            solvedPuzzles.sort()
+            if solvedPuzzles.count(puzzleNumber) == 0:
+                solvedPuzzles.append(puzzleNumber)
+                solvedPuzzles.sort()
             dump(solvedPuzzles, saveFile)
 
 if __name__ == "__main__":

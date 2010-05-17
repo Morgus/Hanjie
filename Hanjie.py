@@ -19,7 +19,7 @@ from os import environ
 import pygame, menu
 
 def main():
-    environ["SDL_VIDEO_CENTERED"] = "1" # Centers the window
+    environ["SDL_VIDEO_CENTERED"] = "1"
     pygame.init()
     if not pygame.font:
         print "Warning, fonts disabled, game not playable"
@@ -27,7 +27,6 @@ def main():
         sysexit()
     if not pygame.mixer:
         print "Warning, sound disabled"
-    # Creates the window and starts the game
     screen = pygame.display.set_mode((800, 800))
     pygame.display.set_caption("Hanjie")
     pygame.display.update()
